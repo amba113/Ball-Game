@@ -1,20 +1,25 @@
 import pygame, sys, math, random
 from Ball import *
 from PlayerBall import *
+from Hud import *
 
 pygame.init()
+if not pygame.font: print('Warning, fonts disabled')
+
 clock = pygame.time.Clock()
 
 size = [900, 700]
 screen = pygame.display.set_mode(size)
 
-
-
-
 counter = 0
 
 player = PlayerBall(4, [900/2, 700/2])
 balls = [player]
+score = Hud("Score: ", [5, 5])
+timer = Hud("Time: ", [900-150, 5])
+
+kills = 0
+time = 0
 
 while True:
     for event in pygame.event.get():
@@ -41,6 +46,7 @@ while True:
                 player.goKey("sdown")
             PlayerBall.getDir(player)
             
+    time += 1
     counter += 1
     if counter >= 10:
         counter = 0
@@ -55,16 +61,23 @@ while True:
     for ball in balls:
         ball.update(size)
     
+    timer.update(int(time/60))
+    score.update(kills)
+    
     for hittingBall in balls:
         for hitBall in balls:
             if hittingBall.ballCollide(hitBall):
                 if hittingBall.kind == "player":
                     balls.remove(hitBall)
+                    kills += 1
+                    
         
 
     screen.fill((250, 175, 225))
     for ball in balls:
         screen.blit(ball.image, ball.rect)
+    screen.blit(score.image, score.rect)
+    screen.blit(timer.image, timer.rect)
     pygame.display.flip()
     clock.tick(60)
     # ~ print(clock.get_fps())
