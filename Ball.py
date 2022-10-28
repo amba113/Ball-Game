@@ -2,10 +2,10 @@ import pygame, sys, math
 
 class Ball():
     def __init__(self, speed = [0,0], startPos = [0,0]):
-        self.images = [pygame.image.load("ball1.png"),
-                       pygame.image.load("ball2.png"),
-                       pygame.image.load("ball3.png"),
-                       pygame.image.load("ball2.png")]
+        self.images = [pygame.image.load("Images/Ball/ball1.png"),
+                       pygame.image.load("Images/Ball/ball2.png"),
+                       pygame.image.load("Images/Ball/ball3.png"),
+                       pygame.image.load("Images/Ball/ball2.png")]
         self.frame = 0
         self.frameMax = len(self.images)-1
         self.image = self.images[self.frame]

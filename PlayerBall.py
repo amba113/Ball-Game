@@ -4,15 +4,15 @@ from Ball import *
 class PlayerBall(Ball):
     def __init__(self, maxSpeed = 4, startPos = [0,0]):
         Ball.__init__(self, [0,0], startPos)
-        self.images0 = [pygame.image.load("playerBall-0.png")]
-        self.images45 = [pygame.image.load("playerBall-45.png")]
-        self.images90 = [pygame.image.load("playerBall-90.png")]
-        self.images135 = [pygame.image.load("playerBall-135.png")]
-        self.images180 = [pygame.image.load("playerBall-180.png")]
-        self.images225 = [pygame.image.load("playerBall-225.png")]
-        self.images270 = [pygame.image.load("playerBall-270.png")]
-        self.images315 = [pygame.image.load("playerBall-315.png")]
-        self.imagesStop = [pygame.image.load("playerBall-stop.png")]
+        self.images0 = [pygame.image.load("Images/Player Ball/playerBall-0.png")]
+        self.images45 = [pygame.image.load("Images/Player Ball/playerBall-45.png")]
+        self.images90 = [pygame.image.load("Images/Player Ball/playerBall-90.png")]
+        self.images135 = [pygame.image.load("Images/Player Ball/playerBall-135.png")]
+        self.images180 = [pygame.image.load("Images/Player Ball/playerBall-180.png")]
+        self.images225 = [pygame.image.load("Images/Player Ball/playerBall-225.png")]
+        self.images270 = [pygame.image.load("Images/Player Ball/playerBall-270.png")]
+        self.images315 = [pygame.image.load("Images/Player Ball/playerBall-315.png")]
+        self.imagesStop = [pygame.image.load("Images/Player Ball/playerBall-stop.png")]
 
         self.images = self.imagesStop
         self.frame = 0
