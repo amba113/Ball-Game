@@ -1,7 +1,10 @@
 import pygame, sys, math, random
+from LevelLoader import *
+from Wall import *
 from Ball import *
 from PlayerBall import *
 from Hud import *
+from Spawner import *
 
 pygame.init()
 if not pygame.font: print('Warning, fonts disabled')
@@ -15,8 +18,12 @@ counter = 0
 
 player = PlayerBall(4, [900/2, 700/2])
 balls = [player]
-score = Hud("Score: ", [5, 5])
-timer = Hud("Time: ", [900-150, 5])
+score = Hud("Score: ", [0, 0])
+timer = Hud("Time: ", [900-150, 0])
+
+tiles = loadLevel("levels/1.lvl")
+walls = tiles[0]
+spawners = tiles[1]
 
 kills = 0
 time = 0
@@ -57,6 +64,12 @@ while True:
             if balls[-1].ballCollide(ball):
                 balls.remove(balls[-1])
                 break
+        for wall in walls:
+            if balls[-1].wallTileCollide(wall):
+                balls.remove(balls[-1])
+                break
+        
+        
             
     for ball in balls:
         ball.update(size)
@@ -70,12 +83,18 @@ while True:
                 if hittingBall.kind == "player":
                     balls.remove(hitBall)
                     kills += 1
+        for wall in walls:
+            hittingBall.wallTileCollide(wall)
                     
         
 
     screen.fill((250, 175, 225))
+    for spawner in spawners:
+        screen.blit(spawner.image, spawner.rect)
     for ball in balls:
         screen.blit(ball.image, ball.rect)
+    for wall in walls:
+        screen.blit(wall.image, wall.rect)
     screen.blit(score.image, score.rect)
     screen.blit(timer.image, timer.rect)
     pygame.display.flip()
