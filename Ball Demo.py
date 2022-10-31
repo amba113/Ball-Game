@@ -86,7 +86,20 @@ while True:
         for wall in walls:
             hittingBall.wallTileCollide(wall)
                     
-        
+    for spawner in spawners:
+        hittingBall.wallTileCollide(spawner)
+        if hittingBall.kind == "player":
+            balls += [Ball([random.randint(-7,7), random.randint(-7,7)], 
+                    [random.randint(100,750), random.randint(100,600)])
+                ]
+            for ball in balls:
+                if balls[-1].ballCollide(ball):
+                    balls.remove(balls[-1])
+                    break
+            for wall in walls:
+                if balls[-1].wallTileCollide(wall):
+                    balls.remove(balls[-1])
+                    break
 
     screen.fill((250, 175, 225))
     for spawner in spawners:
