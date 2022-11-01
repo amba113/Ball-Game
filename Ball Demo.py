@@ -7,6 +7,7 @@ from Hud import *
 from Spawner import *
 
 pygame.init()
+pygame.mixer.init()
 if not pygame.font: print('Warning, fonts disabled')
 
 clock = pygame.time.Clock()
@@ -55,7 +56,7 @@ while True:
             
     time += 1
     counter += 1
-    if counter >= 10:
+    if counter >= 100:
         counter = 0
         balls += [Ball([random.randint(-7,7), random.randint(-7,7)], 
                     [random.randint(100,750), random.randint(100,600)])
@@ -74,6 +75,7 @@ while True:
     for ball in balls:
         ball.update(size)
     
+    
     timer.update(int(time/60))
     score.update(kills)
     
@@ -83,23 +85,24 @@ while True:
                 if hittingBall.kind == "player":
                     balls.remove(hitBall)
                     kills += 1
+                    balls.die(hitBall)
         for wall in walls:
             hittingBall.wallTileCollide(wall)
                     
     for spawner in spawners:
-        hittingBall.wallTileCollide(spawner)
-        if hittingBall.kind == "player":
-            balls += [Ball([random.randint(-7,7), random.randint(-7,7)], 
-                    [random.randint(100,750), random.randint(100,600)])
-                ]
-            for ball in balls:
-                if balls[-1].ballCollide(ball):
-                    balls.remove(balls[-1])
-                    break
-            for wall in walls:
-                if balls[-1].wallTileCollide(wall):
-                    balls.remove(balls[-1])
-                    break
+        spawner.update(size)
+        if spawner.ballCollide(player):
+            ball = spawner.spawn()
+            if ball != None:
+                balls += [ball]
+                for ball in balls:
+                    if balls[-1].ballCollide(ball):
+                        balls.remove(balls[-1])
+                        break
+                for wall in walls:
+                    if balls[-1].wallTileCollide(wall):
+                        balls.remove(balls[-1])
+                        break
 
     screen.fill((250, 175, 225))
     for spawner in spawners:
