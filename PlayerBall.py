@@ -111,8 +111,14 @@ class PlayerBall(Ball):
                     if self.rect.top < other.rect.bottom:
                         self.speedx = -self.speedx
                         self.speedy = -self.speedy
+                        xDist = abs(self.rect.centerx - other.rect.centerx)
+                        yDist = abs(self.rect.centery - other.rect.centery)
                         self.move()
-                        self.speedx = 0
-                        self.speedy = 0
+                        if xDist < yDist:
+                            self.speedx = 0
+                            self.speedy = -self.speedy
+                        if yDist < xDist:
+                            self.speedx = -self.speedx
+                            self.speedy = 0
                         return True
         return False
