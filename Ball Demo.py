@@ -69,8 +69,6 @@ while True:
             if balls[-1].wallTileCollide(wall):
                 balls.remove(balls[-1])
                 break
-        
-        
             
     for ball in balls:
         ball.update(size)
@@ -85,7 +83,7 @@ while True:
                 if hittingBall.kind == "player":
                     balls.remove(hitBall)
                     kills += 1
-                    balls.die(hitBall)
+                    hitBall.die()
         for wall in walls:
             hittingBall.wallTileCollide(wall)
                     

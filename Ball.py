@@ -99,6 +99,7 @@ class Ball():
                             self.didBounceY = True
                         return True
         return False
+    
     def die(self):
         self.killSound.play()
                             
