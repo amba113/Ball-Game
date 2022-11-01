@@ -86,7 +86,7 @@ while True:
                     hitBall.die()
         for wall in walls:
             hittingBall.wallTileCollide(wall)
-                    
+            
     for spawner in spawners:
         spawner.update(size)
         if spawner.ballCollide(player):
