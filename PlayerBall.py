@@ -109,13 +109,10 @@ class PlayerBall(Ball):
             if self.rect.left < other.rect.right:
                 if self.rect.bottom > other.rect.top:
                     if self.rect.top < other.rect.bottom:
-                        if self.speedx > 0 and self.rect.right > other.rect.left:
-                            self.rect.right = other.rect.left - 1
-                        if self.speedx < 0:
-                            self.rect.left = other.rect.right + 1
-                        if self.speedy < 0:
-                            self.rect.top = other.rect.bottom - 1
-                        if self.speedy > 0:
-                            self.rect.bottom = other.rect.top + 1
+                        self.speedx = -self.speedx
+                        self.speedy = -self.speedy
+                        self.move()
+                        self.speedx = 0
+                        self.speedy = 0
                         return True
         return False
