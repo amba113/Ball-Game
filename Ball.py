@@ -1,4 +1,4 @@
-import pygame, sys, math
+import pygame, sys, math, random
 
 class Ball():
     def __init__(self, speed = [0,0], startPos = [0,0]):
@@ -21,10 +21,13 @@ class Ball():
         self.didBounceY = False
         
         self.killSound = pygame.mixer.Sound("Sounds/Kill.wav")
+        self.shotSound = pygame.mixer.Sound("Sounds/LaserHit.wav")
         
         self.kind = "ball"
         self.animationTimer = 0
         self.animationTimerMax = 60/10
+        
+        self.living = True
         
     def update(self, size):
         self.move()
@@ -100,8 +103,13 @@ class Ball():
                         return True
         return False
     
-    def die(self):
-        self.killSound.play()
+    def die(self, kind):
+        if kind == "player":
+            self.killSound.play()
+        elif kind == "laser":
+            self.shotSound.play()
+        self.living == False
+            # ~ self.killSound.play()
                             
     def getDist(self, other):
         x1 = self.rect.centerx

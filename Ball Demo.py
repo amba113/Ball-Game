@@ -5,6 +5,7 @@ from Ball import *
 from PlayerBall import *
 from Hud import *
 from Spawner import *
+from Laser import *
 
 pygame.init()
 pygame.mixer.init()
@@ -25,6 +26,7 @@ timer = Hud("Time: ", [900-150, 0])
 tiles = loadLevel("levels/1.lvl")
 walls = tiles[0]
 spawners = tiles[1]
+lasers = []
 
 kills = 0
 time = 0
@@ -53,6 +55,9 @@ while True:
             elif event.key == pygame.K_s or event.key == pygame.K_DOWN:
                 player.goKey("sdown")
             PlayerBall.getDir(player)
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
+                lasers += [player.shoot()]
             
     time += 1
     counter += 1
@@ -72,6 +77,10 @@ while True:
             
     for ball in balls:
         ball.update(size)
+        
+    for laser in lasers:
+        laser.update(size)
+        
     
     
     timer.update(int(time/60))
@@ -80,12 +89,20 @@ while True:
     for hittingBall in balls:
         for hitBall in balls:
             if hittingBall.ballCollide(hitBall):
-                if hittingBall.kind == "player":
+                if hittingBall.kind == "player" and hitBall.kind != "laser":
                     balls.remove(hitBall)
                     kills += 1
-                    hitBall.die()
+                    hitBall.die(hittingBall.kind)
+                if hittingBall.kind == "laser" and hitBall.kind != "player":
+                    balls.remove(hitBall)
+                    kills += 1
+                    hitBall.die(hittingBall.kind)
         for wall in walls:
             hittingBall.wallTileCollide(wall)
+        for laser in lasers:
+            if hittingBall.kind != "player":
+                hittingBall.laserCollide(laser)
+                laser.collide(hittingBall)
             
     for spawner in spawners:
         spawner.update(size)
@@ -109,6 +126,8 @@ while True:
         screen.blit(ball.image, ball.rect)
     for wall in walls:
         screen.blit(wall.image, wall.rect)
+    for laser in lasers:
+        screen.blit(laser.image, laser.rect)
     screen.blit(score.image, score.rect)
     screen.blit(timer.image, timer.rect)
     pygame.display.flip()

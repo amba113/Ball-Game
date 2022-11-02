@@ -1,5 +1,6 @@
 import pygame, sys, math
 from Ball import *
+from Laser import *
 
 class PlayerBall(Ball):
     def __init__(self, maxSpeed = 4, startPos = [0,0]):
@@ -67,7 +68,37 @@ class PlayerBall(Ball):
         elif direction == "sdown":
             if self.speedy > 0:
                 self.speedy = 0
-            
+     
+    def shoot(self):
+        speed = [0,0]
+        if self.speedx > 0:
+            speed[0] = 6
+            if self.speedy > 0:
+                speed[1] = 6
+            elif self.speedy < 0:
+                speed[1] = -6
+            elif self.speedy == 0:
+                speed[1] = 0
+        elif self.speedx < 0:
+            speed[0] = -6
+            if self.speedy > 0:
+                speed[1] = 6
+            elif self.speedy < 0:
+                speed[1] = -6
+            elif self.speedy == 0:
+                speed[1] = 0
+        elif self.speedx == 0:
+            speed[0] = 0
+            if self.speedy > 0:
+                speed[1] = 6
+            elif self.speedy < 0:
+                speed[1] = -6
+            elif self.speedy == 0:
+                speed[0] = random.randint(-1, 1) * 6
+                speed[1] = random.randint(-1, 1) * 6
+        print("Laser activated")
+        return Laser(speed, self.rect.center)
+                
     def wallCollide(self, size):
         width = size[0]
         height = size[1]
