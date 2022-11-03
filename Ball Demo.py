@@ -1,4 +1,4 @@
-import pygame, sys, math, random
+import pygame, sys, math, random, os
 from LevelLoader import *
 from Wall import *
 from Ball import *
@@ -18,15 +18,23 @@ screen = pygame.display.set_mode(size)
 
 counter = 0
 
-player = PlayerBall(4, [900/2, 700/2])
-balls = [player]
+
+
 score = Hud("Score: ", [0, 0])
 timer = Hud("Time: ", [900-150, 0])
+win = Hud("Congrats! You have beat the game! :D", [150, 700/2])
+levName = Hud("Level ", [900/2 - 75, 0])
 
-tiles = loadLevel("levels/1.lvl")
+level = 1
+
+tiles = loadLevel("levels/"+ str(level) + ".lvl")
 walls = tiles[0]
 spawners = tiles[1]
+player = PlayerBall(4, tiles[2])
+balls = [player]
 lasers = []
+
+end = False
 
 kills = 0
 time = 0
@@ -58,7 +66,8 @@ while True:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
                 lasers += [player.shoot()]
-            
+    
+    #----------Spawn Balls--------------     
     time += 1
     counter += 1
     if counter >= 100:
@@ -74,18 +83,20 @@ while True:
             if balls[-1].wallTileCollide(wall):
                 balls.remove(balls[-1])
                 break
-            
+                
+    #----------Updates--------------         
     for ball in balls:
         ball.update(size)
         
     for laser in lasers:
         laser.update(size)
         
-    
-    
     timer.update(int(time/60))
     score.update(kills)
+    levName.update(level)
+    win.update("")
     
+    #----------Collisions-------------- 
     for hittingBall in balls:
         for hitBall in balls:
             if hittingBall.ballCollide(hitBall):
@@ -95,14 +106,16 @@ while True:
                     hitBall.die(hittingBall.kind)
                 if hittingBall.kind == "laser" and hitBall.kind != "player":
                     balls.remove(hitBall)
-                    kills += 1
                     hitBall.die(hittingBall.kind)
         for wall in walls:
             hittingBall.wallTileCollide(wall)
+            
         for laser in lasers:
             if hittingBall.kind != "player":
                 hittingBall.laserCollide(laser)
                 laser.collide(hittingBall)
+            for wall in walls:
+                laser.wallTileCollide(wall)
             
     for spawner in spawners:
         spawner.update(size)
@@ -118,18 +131,52 @@ while True:
                     if balls[-1].wallTileCollide(wall):
                         balls.remove(balls[-1])
                         break
+    
+    #----------Check end level-------------- 
+    if kills > 5:
+        level += 1
+        maxLevel = len(os.listdir("levels"))
+        if level <= maxLevel: 
+            tiles = loadLevel("levels/"+ str(level) + ".lvl")
+            walls = tiles[0]
+            spawners = tiles[1]
+            player = PlayerBall(4, tiles[2])
+            balls = [player]
+            kills = 0
+            end = False
+        elif level > maxLevel:
+            tiles = loadLevel("end.lvl")
+            end = True
+            
 
-    screen.fill((250, 175, 225))
-    for spawner in spawners:
-        screen.blit(spawner.image, spawner.rect)
+    
+                        
+    #----------Remove Balls-------------- 
     for ball in balls:
-        screen.blit(ball.image, ball.rect)
-    for wall in walls:
-        screen.blit(wall.image, wall.rect)
+        if ball.living == False:
+            balls.remove(ball)
+            kills += 2
+            
     for laser in lasers:
-        screen.blit(laser.image, laser.rect)
-    screen.blit(score.image, score.rect)
-    screen.blit(timer.image, timer.rect)
+        if laser.living == False:
+            lasers.remove(laser)
+    
+    #----------Draw-------------- 
+    if end == True:
+        screen.fill((178, 251, 226))
+        screen.blit(win.image, win.rect)
+    else:
+        screen.fill((250, 175, 225))
+        for spawner in spawners:
+            screen.blit(spawner.image, spawner.rect)
+        for laser in lasers:
+            screen.blit(laser.image, laser.rect)
+        for ball in balls:
+            screen.blit(ball.image, ball.rect)
+        for wall in walls:
+            screen.blit(wall.image, wall.rect)
+        screen.blit(score.image, score.rect)
+        screen.blit(timer.image, timer.rect)
+        screen.blit(levName.image, levName.rect)
     pygame.display.flip()
     clock.tick(60)
-    # ~ print(clock.get_fps())

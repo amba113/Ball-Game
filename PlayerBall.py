@@ -5,21 +5,23 @@ from Laser import *
 class PlayerBall(Ball):
     def __init__(self, maxSpeed = 4, startPos = [0,0]):
         Ball.__init__(self, [0,0], startPos)
-        self.images0 = [pygame.image.load("Images/Player Ball/playerBall-0.png")]
-        self.images45 = [pygame.image.load("Images/Player Ball/playerBall-45.png")]
-        self.images90 = [pygame.image.load("Images/Player Ball/playerBall-90.png")]
-        self.images135 = [pygame.image.load("Images/Player Ball/playerBall-135.png")]
-        self.images180 = [pygame.image.load("Images/Player Ball/playerBall-180.png")]
-        self.images225 = [pygame.image.load("Images/Player Ball/playerBall-225.png")]
-        self.images270 = [pygame.image.load("Images/Player Ball/playerBall-270.png")]
-        self.images315 = [pygame.image.load("Images/Player Ball/playerBall-315.png")]
-        self.imagesStop = [pygame.image.load("Images/Player Ball/playerBall-stop.png")]
+        scale = [100, 100]
+        self.images0 = [pygame.transform.scale(pygame.image.load("Images/Player Ball/playerBall-0.png"), scale)]
+        self.images45 = [pygame.transform.scale(pygame.image.load("Images/Player Ball/playerBall-45.png"), scale)]
+        self.images90 = [pygame.transform.scale(pygame.image.load("Images/Player Ball/playerBall-90.png"), scale)]
+        self.images135 = [pygame.transform.scale(pygame.image.load("Images/Player Ball/playerBall-135.png"), scale)]
+        self.images180 = [pygame.transform.scale(pygame.image.load("Images/Player Ball/playerBall-180.png"), scale)]
+        self.images225 = [pygame.transform.scale(pygame.image.load("Images/Player Ball/playerBall-225.png"), scale)]
+        self.images270 = [pygame.transform.scale(pygame.image.load("Images/Player Ball/playerBall-270.png"), scale)]
+        self.images315 = [pygame.transform.scale(pygame.image.load("Images/Player Ball/playerBall-315.png"), scale)]
+        self.imagesStop = [pygame.transform.scale(pygame.image.load("Images/Player Ball/playerBall-stop.png"), scale)]
 
         self.images = self.imagesStop
         self.frame = 0
         self.frameMax = len(self.images)-1
         self.image = self.images[self.frame]
         self.rect = self.image.get_rect(center = startPos)
+        
         
         self.maxSpeed = maxSpeed
         self.kind = "player"
@@ -72,31 +74,32 @@ class PlayerBall(Ball):
     def shoot(self):
         speed = [0,0]
         if self.speedx > 0:
-            speed[0] = 6
+            speed[0] = 8
             if self.speedy > 0:
-                speed[1] = 6
+                speed[1] = 8
             elif self.speedy < 0:
-                speed[1] = -6
+                speed[1] = -8
             elif self.speedy == 0:
                 speed[1] = 0
         elif self.speedx < 0:
-            speed[0] = -6
+            speed[0] = -8
             if self.speedy > 0:
-                speed[1] = 6
+                speed[1] = 8
             elif self.speedy < 0:
-                speed[1] = -6
+                speed[1] = -8
             elif self.speedy == 0:
                 speed[1] = 0
         elif self.speedx == 0:
             speed[0] = 0
             if self.speedy > 0:
-                speed[1] = 6
+                speed[1] = 8
             elif self.speedy < 0:
-                speed[1] = -6
-            elif self.speedy == 0:
-                speed[0] = random.randint(-1, 1) * 6
-                speed[1] = random.randint(-1, 1) * 6
-        print("Laser activated")
+                speed[1] = -8
+            else:
+                while speed == [0, 0]:
+                    speed[0] = random.randint(-1, 1) * 8
+                    speed[1] = random.randint(-1, 1) * 8
+                    
         return Laser(speed, self.rect.center)
                 
     def wallCollide(self, size):

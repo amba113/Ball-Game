@@ -1,6 +1,7 @@
 import pygame, sys, math
 from Wall import *
 from Spawner import *
+from PlayerBall import *
 
 def loadLevel(lev):
     f = open(lev, 'r')
@@ -12,6 +13,7 @@ def loadLevel(lev):
     tiles = []
     walls = []
     spawners = []
+    playerLoc = []
     
     newLines = []
     for line in lines:
@@ -28,9 +30,12 @@ def loadLevel(lev):
                 walls += [Wall([x*size + offset, y*size + offset])]
             if c == "X":
                 spawners += [Spawner([x*size + offset, y*size + offset])]
+            if c == "$":
+                playerLoc = [x*size + offset, y*size + offset]
                 
     tiles = [walls, 
-             spawners]
+             spawners,
+             playerLoc]
     return tiles
     
 # ~ loadLevel("levels/1.lvl")

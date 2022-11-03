@@ -103,13 +103,27 @@ class Ball():
                         return True
         return False
     
+    def laserCollide(self, other):
+        if self.rect.right > other.rect.left:
+            if self.rect.left < other.rect.right:
+                if self.rect.bottom > other.rect.top:
+                    if self.rect.top < other.rect.bottom:
+                        # ~ if not self.didBounceX:
+                            # ~ self.speedx = -self.speedx
+                            # ~ self.didBounceX = True
+                        # ~ if not self.didBounceY:
+                            # ~ self.speedy = -self.speedy
+                            # ~ self.didBounceY = True
+                        self.living = False
+                        return True
+        return False
+    
     def die(self, kind):
         if kind == "player":
             self.killSound.play()
         elif kind == "laser":
             self.shotSound.play()
         self.living == False
-            # ~ self.killSound.play()
                             
     def getDist(self, other):
         x1 = self.rect.centerx
