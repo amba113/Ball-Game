@@ -3,13 +3,15 @@ from Ball import *
 
 class Laser():
     def __init__(self, speed, startPos = [0,0]):
-                
-        self.imagesVertical = [pygame.transform.scale(pygame.image.load("Images/Laser/LaserVert.png"), scale)]
-        self.imagesHorizontal = [pygame.transform.scale(pygame.image.load("Images/Laser/LaserHori.png"), scale)]
-        self.imagesPosSlope = [pygame.transform.scale(pygame.image.load("Images/Laser/LaserInc.png"), scale)]
-        self.imagesNegSlope = [pygame.transform.scale(pygame.image.load("Images/Laser/LaserDec.png"), scale)]
         
-        self.image = self.imagesLaserVertical[0]
+        
+        self.images = [pygame.image.load("Images/Laser/LaserDefault.png"),
+                       pygame.image.load("Images/Laser/LaserVert.png"),
+                       pygame.image.load("Images/Laser/LaserHori.png"),
+                       pygame.image.load("Images/Laser/LaserInc.png"),
+                       pygame.image.load("Images/Laser/LaserDec.png")]
+        
+        self.image = self.images[0]
 
         self.kind = "laser"
         
@@ -29,6 +31,8 @@ class Laser():
         
     def update(self, size):
         self.move()
+        
+        self.getDir()
         
         self.didBounceX = False
         self.didBounceY = False
@@ -60,17 +64,17 @@ class Laser():
     def getDir(self):
         if self.speedx > 0:
             if self.speedy > 0:
-                self.images = self.imagesNegSlope
+                self.image = self.images[4]
             elif self.speedy < 0:
-                self.images = self.imagesPosSlope
+                self.image = self.images[3]
             else:
-                self.images = self.imagesHorizontal
+                self.image = self.images[2]
         elif self.speedx < 0:
             if self.speedy > 0:
-                self.images = self.imagesPosSlope
+                self.image = self.images[3]
             elif self.speedy < 0:
-                self.images = self.imagesNegSlope
+                self.image = self.images[4]
             else:
-                self.images = self.imagesHorizontal
+                self.image = self.images[2]
         else:
-            self.images = self.imagesVertical
+            self.image = self.images[1]
