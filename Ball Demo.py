@@ -133,7 +133,7 @@ while True:
                         break
     
     #----------Check end level-------------- 
-    if kills > 5:
+    if kills > 50:
         level += 1
         maxLevel = len(os.listdir("levels"))
         if level <= maxLevel: 
