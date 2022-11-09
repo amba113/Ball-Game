@@ -44,6 +44,9 @@ while True:
         if event.type == pygame.QUIT:
             sys.exit();
         if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                sys.exit();
+        if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a or event.key == pygame.K_LEFT:
                 player.goKey("left")
             elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
